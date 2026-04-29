@@ -79,6 +79,9 @@ EOF
 # this installs a package from fedora repos
 dnf5 install -y tmux
 
+
+cat /etc/yum.repos.d/terra*.repo || true
+ls /etc/pki/rpm-gpg/ || true
 # Use a COPR Example:
 #
 # dnf5 -y copr enable ublue-os/staging

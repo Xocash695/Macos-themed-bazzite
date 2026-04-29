@@ -3,14 +3,56 @@
 set -ouex pipefail
 
 ### Install packages
+# 1. MacTahoe GTK Theme (The "Shirt")
+# Mac Customization I guess
+git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1 /tmp/tahoe-gtk
+# -d /usr/share/themes makes it available to all users
+bash /tmp/tahoe-gtk/install.sh -d /usr/share/themes
 
+# 2. MacTahoe Icon Theme (The "Accessories")
+git clone https://github.com/vinceliuice/MacTahoe-icon-theme.git --depth=1 /tmp/tahoe-icons
+# -d /usr/share/icons is the standard for system-wide icons
+bash /tmp/tahoe-icons/install.sh -d /usr/share/icons
+
+# 3. MacTahoe KDE Theme (The "Jacket")
+git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-kde
+# The KDE script is a bit different; we run the main installer
+# Note: Some scripts use sudo internally; in a uBlue build, you are already root.
+bash /tmp/tahoe-kde/install.sh
+
+# change boot logo:
+# # Download the Apple Plymouth theme
+git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
+
+# Create the directory and copy the theme files
+mkdir -p /usr/share/plymouth/themes/apple-mac-plymouth
+cp -r /tmp/apple-plymouth/* /usr/share/plymouth/themes/apple-mac-plymouth/
+
+# set theme by default
+# mkdir -p /etc/skel/.config
+
+# Set the Global Theme (Window look, Colors, Splash screen)
+# This command tells Plasma to use the MacTahoe look and feel
+mkdir -p /etc/skel/.config/plasma-workspace/env
+echo "lookandfeeltool -a MacTahoe" > /etc/skel/.config/plasma-workspace/env/set-theme.sh
+chmod +x /etc/skel/.config/plasma-workspace/env/set-theme.sh
+
+# Set the Icon Theme specifically
+cat <<EOF > /etc/skel/.config/kdeglobals
+[Icons]
+Theme=MacTahoe
+EOF
+
+# Set it as the default theme
+# Note: In an image build, we use the path to the .plymouth file
+plymouth-set-default-theme -R apple-mac-plymouth
 # Packages can be installed from any enabled yum repo on the image.
 # RPMfusion repos are available by default in ublue main images
 # List of rpmfusion packages can be found here:
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/43/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-dnf5 install -y tmux 
+dnf5 install -y tmux
 
 # Use a COPR Example:
 #

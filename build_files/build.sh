@@ -20,7 +20,7 @@ mkdir -p /usr/share/icons
 
 git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1 /tmp/tahoe-gtk
 cd /tmp/tahoe-gtk
-./install.sh --silent-mode
+./install.sh --silent-mode 2>&1 | tail -50 || true
 
 # MacTahoe Icon Theme
 git clone https://github.com/vinceliuice/MacTahoe-icon-theme.git --depth=1 /tmp/tahoe-icons

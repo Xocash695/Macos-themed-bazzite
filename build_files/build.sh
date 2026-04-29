@@ -6,7 +6,7 @@ set -ouex pipefail
 # 1. MacTahoe GTK Theme (The "Shirt")
 # The installer might fail if these don't exist yet
 
-dnf install -y sassc bc gtk-murrine-engine
+dnf install -y sassc bc glib2-devel
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons
 

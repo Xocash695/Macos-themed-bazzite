@@ -6,7 +6,6 @@ set -ouex pipefail
 # 1. MacTahoe GTK Theme (The "Shirt")
 # The installer might fail if these don't exist yet
 #
-dnf config-manager --set-disabled terra-mesa
 dnf install -y sassc bc gtk-murrine-engine
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons

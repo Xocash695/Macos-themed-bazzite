@@ -6,7 +6,18 @@ set -ouex pipefail
 # 1. MacTahoe GTK Theme (The "Shirt")
 # The installer might fail if these don't exist yet
 #
-dnf install -y sassc bc gtk-murrine-engine
+dnf install -y sassc
+dnf install -y vlc
+dnf install -y firefox
+dnf install -y zsh
+
+# Install Oh My Zsh system-wide into skel so all new users get it
+git clone https://github.com/ohmyzsh/ohmyzsh.git /etc/skel/.oh-my-zsh
+cp /etc/skel/.oh-my-zsh/templates/zshrc.zsh-template /etc/skel/.zshrc
+
+# Set zsh as default shell for new users
+sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
+
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons
 
@@ -33,18 +44,31 @@ cd /tmp/tahoe-kde
 
 # change boot logo:
 # # Download the Apple Plymouth theme
+
 # Install Plymouth theme
+#
+rpm -q plymouth || true
+git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
+
+# Install Apple Plymouth theme
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
 
 PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/apple-mac-plymouth"
 mkdir -p "$PLYMOUTH_THEME_DIR"
 cp -r /tmp/apple-plymouth/* "$PLYMOUTH_THEME_DIR/"
 
-# Point the default symlink at our theme — no initramfs rebuild needed
-PLYMOUTH_CONF="/usr/share/plymouth/plymouthd.defaults"
-sed -i 's/^Theme=.*/Theme=apple-mac-plymouth/' "$PLYMOUTH_CONF" || \
-    echo -e "[Daemon]\nTheme=apple-mac-plymouth" > "$PLYMOUTH_CONF"
+# Set theme in both config locations to be safe
+mkdir -p /etc/plymouth
+cat > /etc/plymouth/plymouthd.conf << 'EOF'
+[Daemon]
+Theme=apple-mac-plymouth
+ShowDelay=0
+EOF
 
+# Also update the defaults file if it exists
+if [ -f /usr/share/plymouth/plymouthd.defaults ]; then
+    sed -i 's/^Theme=.*/Theme=apple-mac-plymouth/' /usr/share/plymouth/plymouthd.defaults
+fi
 # Also set it in the runtime config location
 mkdir -p /etc/plymouth
 cat > /etc/plymouth/plymouthd.conf << 'EOF'
@@ -58,19 +82,44 @@ EOF
 
 # Set the Global Theme (Window look, Colors, Splash screen)
 # This command tells Plasma to use the MacTahoe look and feel
-mkdir -p /etc/skel/.config/plasma-workspace/env
-echo "lookandfeeltool -a MacTahoe" > /etc/skel/.config/plasma-workspace/env/set-theme.sh
-chmod +x /etc/skel/.config/plasma-workspace/env/set-theme.sh
 
-# Set the Icon Theme specifically
-cat <<EOF > /etc/skel/.config/kdeglobals
+# Install Kvantum
+dnf install -y kvantum
+
+# Set up skel configs
+mkdir -p /etc/skel/.config/Kvantum
+
+cat > /etc/skel/.config/Kvantum/kvantum.kvconfig << 'EOF'
+[General]
+theme=MacTahoe
+EOF
+
+cat > /etc/skel/.config/kdeglobals << 'EOF'
 [Icons]
 Theme=MacTahoe
+
+[KDE]
+LookAndFeelPackage=MacTahoe
+
+[General]
+widgetStyle=kvantum
+EOF
+
+cat > /etc/skel/.config/plasmarc << 'EOF'
+[Theme]
+name=MacTahoe
 EOF
 
 # Set it as the default theme
 # Note: In an image build, we use the path to the .plymouth file
+#
+# using ulauncher
+dnf install -y ulauncher
 
+# Install Liquid Glass theme
+git clone https://github.com/kayozxo/ulauncher-liquid-glass.git /tmp/ulauncher-liquid-glass
+cd /tmp/ulauncher-liquid-glass
+./install.sh
 # Packages can be installed from any enabled yum repo on the image.
 # RPMfusion repos are available by default in ublue main images
 # List of rpmfusion packages can be found here:
@@ -90,6 +139,8 @@ sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-m
 # dnf5 -y install package
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
+
+
 
 #### Example for enabling a System Unit File
 

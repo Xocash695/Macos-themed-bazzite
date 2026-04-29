@@ -5,7 +5,6 @@ set -ouex pipefail
 ### Install packages
 # 1. MacTahoe GTK Theme (The "Shirt")
 # The installer might fail if these don't exist yet
-dnf install -y https://copr.fedorainfracloud.org/coprs/ttedeschi/terraform/repo/fedora-$(rpm -E %fedora)/ttedeschi-terraform-fedora-$(rpm -E %fedora).repo || true
 dnf install -y sassc bc gtk-murrine-engine
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons

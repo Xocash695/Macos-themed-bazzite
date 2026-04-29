@@ -13,16 +13,17 @@ mkdir -p /usr/share/icons
 # 2. GTK THEME
 # We add the '-p' flag which most of Vince's scripts use for 'path'
 # and ensure we are running it without interactive prompts
+# GTK Theme
 git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1 /tmp/tahoe-gtk
 cd /tmp/tahoe-gtk
-./install.sh -d /usr/share/themes
+./install.sh
 
-# 3. ICON THEME
+# Icon Theme
 git clone https://github.com/vinceliuice/MacTahoe-icon-theme.git --depth=1 /tmp/tahoe-icons
 cd /tmp/tahoe-icons
-./install.sh -d /usr/share/icons
+./install.sh
 
-# 4. KDE THEME
+# KDE Theme
 git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-kde
 cd /tmp/tahoe-kde
 ./install.sh

@@ -83,7 +83,7 @@ dnf5 install -y tmux
 # cat /etc/yum.repos.d/terra*.repo || true
 # ls /etc/pki/rpm-gpg/ || true
 
-sudo sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo
+sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo
 # Use a COPR Example:
 #
 # dnf5 -y copr enable ublue-os/staging

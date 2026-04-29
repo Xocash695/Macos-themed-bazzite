@@ -7,8 +7,6 @@ set -ouex pipefail
 # The installer might fail if these don't exist yet
 #
 dnf install -y sassc
-dnf install -y vlc
-dnf install -y firefox
 dnf install -y zsh
 
 # Install Oh My Zsh system-wide into skel so all new users get it
@@ -25,9 +23,6 @@ mkdir -p /usr/share/icons
 # 2. GTK THEME
 # We add the '-p' flag which most of Vince's scripts use for 'path'
 # and ensure we are running it without interactive prompts
-# GTK Theme
-dnf install -y sassc bc glib2-devel
-
 # GTK Theme - must specify dest since default is ~/.themes
 git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1 /tmp/tahoe-gtk
 cd /tmp/tahoe-gtk

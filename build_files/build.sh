@@ -79,9 +79,11 @@ EOF
 # this installs a package from fedora repos
 dnf5 install -y tmux
 
+# this was to make sure the keys were there
+# cat /etc/yum.repos.d/terra*.repo || true
+# ls /etc/pki/rpm-gpg/ || true
 
-cat /etc/yum.repos.d/terra*.repo || true
-ls /etc/pki/rpm-gpg/ || true
+rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-terra44-mesa
 # Use a COPR Example:
 #
 # dnf5 -y copr enable ublue-os/staging

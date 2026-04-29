@@ -1,4 +1,3 @@
-[container]
 [customizations.installer.kickstart]
 contents = """
 %post

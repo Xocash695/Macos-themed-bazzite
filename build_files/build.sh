@@ -5,9 +5,12 @@ set -ouex pipefail
 ### Install packages
 # 1. MacTahoe GTK Theme (The "Shirt")
 # The installer might fail if these don't exist yet
+#
+dnf config-manager --set-disabled terra-mesa
 dnf install -y sassc bc gtk-murrine-engine
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons
+
 
 # 2. GTK THEME
 # We add the '-p' flag which most of Vince's scripts use for 'path'

@@ -4,21 +4,26 @@ set -ouex pipefail
 
 ### Install packages
 # 1. MacTahoe GTK Theme (The "Shirt")
-# Mac Customization I guess
+# The installer might fail if these don't exist yet
+mkdir -p /usr/share/themes
+mkdir -p /usr/share/icons
+
+# 2. GTK THEME
+# We add the '-p' flag which most of Vince's scripts use for 'path'
+# and ensure we are running it without interactive prompts
 git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1 /tmp/tahoe-gtk
-# -d /usr/share/themes makes it available to all users
-bash /tmp/tahoe-gtk/install.sh -d /usr/share/themes
+cd /tmp/tahoe-gtk
+./install.sh -d /usr/share/themes
 
-# 2. MacTahoe Icon Theme (The "Accessories")
+# 3. ICON THEME
 git clone https://github.com/vinceliuice/MacTahoe-icon-theme.git --depth=1 /tmp/tahoe-icons
-# -d /usr/share/icons is the standard for system-wide icons
-bash /tmp/tahoe-icons/install.sh -d /usr/share/icons
+cd /tmp/tahoe-icons
+./install.sh -d /usr/share/icons
 
-# 3. MacTahoe KDE Theme (The "Jacket")
+# 4. KDE THEME
 git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-kde
-# The KDE script is a bit different; we run the main installer
-# Note: Some scripts use sudo internally; in a uBlue build, you are already root.
-bash /tmp/tahoe-kde/install.sh
+cd /tmp/tahoe-kde
+./install.sh
 
 # change boot logo:
 # # Download the Apple Plymouth theme

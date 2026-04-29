@@ -6,7 +6,7 @@ set -ouex pipefail
 # 1. MacTahoe GTK Theme (The "Shirt")
 # The installer might fail if these don't exist yet
 
-dnf install -y sassc bc
+dnf install -y sassc bc gtk-murrine-engine
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons
 
@@ -29,11 +29,25 @@ cd /tmp/tahoe-kde
 
 # change boot logo:
 # # Download the Apple Plymouth theme
+# Install Plymouth theme
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
 
-# Create the directory and copy the theme files
-mkdir -p /usr/share/plymouth/themes/apple-mac-plymouth
-cp -r /tmp/apple-plymouth/* /usr/share/plymouth/themes/apple-mac-plymouth/
+PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/apple-mac-plymouth"
+mkdir -p "$PLYMOUTH_THEME_DIR"
+cp -r /tmp/apple-plymouth/* "$PLYMOUTH_THEME_DIR/"
+
+# Point the default symlink at our theme — no initramfs rebuild needed
+PLYMOUTH_CONF="/usr/share/plymouth/plymouthd.defaults"
+sed -i 's/^Theme=.*/Theme=apple-mac-plymouth/' "$PLYMOUTH_CONF" || \
+    echo -e "[Daemon]\nTheme=apple-mac-plymouth" > "$PLYMOUTH_CONF"
+
+# Also set it in the runtime config location
+mkdir -p /etc/plymouth
+cat > /etc/plymouth/plymouthd.conf << 'EOF'
+[Daemon]
+Theme=apple-mac-plymouth
+ShowDelay=0
+EOF
 
 # set theme by default
 # mkdir -p /etc/skel/.config
@@ -52,7 +66,7 @@ EOF
 
 # Set it as the default theme
 # Note: In an image build, we use the path to the .plymouth file
-plymouth-set-default-theme -R apple-mac-plymouth
+
 # Packages can be installed from any enabled yum repo on the image.
 # RPMfusion repos are available by default in ublue main images
 # List of rpmfusion packages can be found here:

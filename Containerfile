@@ -36,8 +36,6 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build.sh
 
 
-# change the boot logo to Apple logo:
-RUN plymouth-set-default-theme apple-mac-plymouth
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint

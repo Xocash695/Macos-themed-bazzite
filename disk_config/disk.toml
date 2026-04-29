@@ -1,5 +1,4 @@
 [container]
-source = "ghcr.io/xocash695/macos-themed-bazzite:latest"
 [[customizations.filesystem]]
 mountpoint = "/"
 minsize = "20 GiB"

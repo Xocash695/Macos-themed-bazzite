@@ -19,7 +19,7 @@ dnf install -y sassc bc glib2-devel
 # GTK Theme - must specify dest since default is ~/.themes
 git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1 /tmp/tahoe-gtk
 cd /tmp/tahoe-gtk
-./install.sh -d /usr/share/themes --silent-mode || { echo "GTK theme install failed with code $?"; cat /tmp/tahoe-gtk/install.sh | head -50; ls /tmp/tahoe-gtk/; exit 1; }
+./install.sh  --silent-mode || { echo "GTK theme install failed with code $?"; cat /tmp/tahoe-gtk/install.sh | head -50; ls /tmp/tahoe-gtk/; exit 1; }
 
 # Icon Theme
 git clone https://github.com/vinceliuice/MacTahoe-icon-theme.git --depth=1 /tmp/tahoe-icons

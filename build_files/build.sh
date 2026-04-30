@@ -17,7 +17,7 @@ sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' /e
 
 flatpak override --filesystem=xdg-config/gtk-3.0
 flatpak override --filesystem=xdg-config/gtk-4.0
-
+flatpak install -y flathub org.mozilla.firefox
 # MacTahoe GTK Theme
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons

@@ -14,7 +14,7 @@ sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     /etc/skel/.oh-my-zsh/custom/themes/powerlevel10k
 sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' /etc/skel/.zshrc
-flatpak install -y flathub org.mozilla.firefox
+
 flatpak override --filesystem=xdg-config/gtk-3.0
 flatpak override --filesystem=xdg-config/gtk-4.0
 
@@ -43,32 +43,14 @@ mkdir -p "$PLYMOUTH_THEME_DIR"
 cp -r /tmp/apple-plymouth/* "$PLYMOUTH_THEME_DIR/"
 
 mkdir -p /etc/plymouth
-cat > /etc/plymouth/plymouthd.conf << 'EOF'
-[Daemon]
-Theme=apple-mac-plymouth
-ShowDelay=0
-EOF
+printf '[Daemon]\nTheme=apple-mac-plymouth\nShowDelay=0\n' > /etc/plymouth/plymouthd.conf
 
 if [ -f /usr/share/plymouth/plymouthd.defaults ]; then
     sed -i 's/^Theme=.*/Theme=apple-mac-plymouth/' /usr/share/plymouth/plymouthd.defaults
 fi
 
 # Regenerate initramfs on first boot to apply Plymouth theme
-cat > /etc/systemd/system/plymouth-theme-set.service << 'EOF'
-[Unit]
-Description=Set Plymouth theme on first boot
-ConditionPathExists=!/var/lib/plymouth-theme-set
-After=local-fs.target
-
-[Service]
-Type=oneshot
-ExecStart=/usr/sbin/plymouth-set-default-theme -R apple-mac-plymouth
-ExecStartPost=/usr/bin/touch /var/lib/plymouth-theme-set
-RemainAfterExit=yes
-
-[Install]
-WantedBy=multi-user.target
-EOF
+printf '[Unit]\nDescription=Set Plymouth theme on first boot\nConditionPathExists=!/var/lib/plymouth-theme-set\nAfter=local-fs.target\n\n[Service]\nType=oneshot\nExecStart=/usr/sbin/plymouth-set-default-theme -R apple-mac-plymouth\nExecStartPost=/usr/bin/touch /var/lib/plymouth-theme-set\nRemainAfterExit=yes\n\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/plymouth-theme-set.service
 
 systemctl enable plymouth-theme-set.service
 
@@ -76,30 +58,19 @@ systemctl enable plymouth-theme-set.service
 mkdir -p /etc/skel/.config/gtk-3.0
 mkdir -p /etc/skel/.config/gtk-4.0
 
-cat > /etc/skel/.config/kdeglobals << 'EOF'
-[Icons]
-Theme=MacTahoe
+printf '[Icons]\nTheme=MacTahoe\n\n[KDE]\nLookAndFeelPackage=MacTahoe\n' > /etc/skel/.config/kdeglobals
 
-[KDE]
-LookAndFeelPackage=MacTahoe
-EOF
+printf '[Theme]\nname=MacTahoe\n' > /etc/skel/.config/plasmarc
 
-cat > /etc/skel/.config/plasmarc << 'EOF'
-[Theme]
-name=MacTahoe
-EOF
+printf '[Settings]\ngtk-theme-name=MacTahoe\ngtk-icon-theme-name=MacTahoe\n' > /etc/skel/.config/gtk-3.0/settings.ini
 
-cat > /etc/skel/.config/gtk-3.0/settings.ini << 'EOF'
-[Settings]
-gtk-theme-name=MacTahoe
-gtk-icon-theme-name=MacTahoe
-EOF
-
-cat > /etc/skel/.config/gtk-4.0/settings.ini << 'EOF'
-[Settings]
-gtk-theme-name=MacTahoe
-gtk-icon-theme-name=MacTahoe
-EOF
+printf '[Settings]\ngtk-theme-name=MacTahoe\ngtk-icon-theme-name=MacTahoe\n' > /etc/skel/.config/gtk-4.0/settings.ini
 
 # Fix terra-mesa GPG key issue for ISO builds
-sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d
+sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo
+
+# Extra packages
+dnf install -y tmux
+
+# Enable services
+systemctl enable podman.socket

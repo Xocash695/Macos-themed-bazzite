@@ -2,17 +2,21 @@
 set -ouex pipefail
 
 ### Install packages
-dnf install -y sassc zsh kvantum ulauncher
+dnf install -y sassc zsh
+useradd -D -s /bin/zsh
 
 # Oh My Zsh system-wide
 git clone https://github.com/ohmyzsh/ohmyzsh.git /etc/skel/.oh-my-zsh
 cp /etc/skel/.oh-my-zsh/templates/zshrc.zsh-template /etc/skel/.zshrc
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 
-# ULauncher Liquid Glass theme
-git clone https://github.com/kayozxo/ulauncher-liquid-glass.git /tmp/ulauncher-liquid-glass
-cd /tmp/ulauncher-liquid-glass
-./install.sh
+# Install Powerlevel10k theme
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+    /etc/skel/.oh-my-zsh/custom/themes/powerlevel10k
+sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' /etc/skel/.zshrc
+flatpak install -y flathub org.mozilla.firefox
+flatpak override --filesystem=xdg-config/gtk-3.0
+flatpak override --filesystem=xdg-config/gtk-4.0
 
 # MacTahoe GTK Theme
 mkdir -p /usr/share/themes
@@ -49,15 +53,28 @@ if [ -f /usr/share/plymouth/plymouthd.defaults ]; then
     sed -i 's/^Theme=.*/Theme=apple-mac-plymouth/' /usr/share/plymouth/plymouthd.defaults
 fi
 
+# Regenerate initramfs on first boot to apply Plymouth theme
+cat > /etc/systemd/system/plymouth-theme-set.service << 'EOF'
+[Unit]
+Description=Set Plymouth theme on first boot
+ConditionPathExists=!/var/lib/plymouth-theme-set
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/plymouth-set-default-theme -R apple-mac-plymouth
+ExecStartPost=/usr/bin/touch /var/lib/plymouth-theme-set
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl enable plymouth-theme-set.service
+
 # KDE skel configs
-mkdir -p /etc/skel/.config/Kvantum
 mkdir -p /etc/skel/.config/gtk-3.0
 mkdir -p /etc/skel/.config/gtk-4.0
-
-cat > /etc/skel/.config/Kvantum/kvantum.kvconfig << 'EOF'
-[General]
-theme=MacTahoe
-EOF
 
 cat > /etc/skel/.config/kdeglobals << 'EOF'
 [Icons]
@@ -65,9 +82,6 @@ Theme=MacTahoe
 
 [KDE]
 LookAndFeelPackage=MacTahoe
-
-[General]
-widgetStyle=kvantum
 EOF
 
 cat > /etc/skel/.config/plasmarc << 'EOF'
@@ -88,10 +102,4 @@ gtk-icon-theme-name=MacTahoe
 EOF
 
 # Fix terra-mesa GPG key issue for ISO builds
-sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo
-
-# Extra packages
-dnf install -y tmux
-
-# Enable services
-systemctl enable podman.socket
+sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d

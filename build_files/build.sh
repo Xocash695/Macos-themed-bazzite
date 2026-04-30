@@ -16,9 +16,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     /etc/skel/.oh-my-zsh/custom/themes/powerlevel10k
 sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' /etc/skel/.zshrc
 
-flatpak override --filesystem=xdg-config/gtk-3.0
-flatpak override --filesystem=xdg-config/gtk-4.0
-flatpak install -y flathub org.mozilla.firefox
+
 # MacTahoe GTK Theme
 mkdir -p /usr/share/themes
 mkdir -p /usr/share/icons

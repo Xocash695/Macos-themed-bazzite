@@ -3,6 +3,7 @@ set -ouex pipefail
 
 ### Install packages
 dnf install -y sassc zsh
+dnf install -y plymouth-plugin-script
 useradd -D -s /bin/zsh
 
 # Oh My Zsh system-wide

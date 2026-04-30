@@ -6,9 +6,7 @@ dnf install -y sassc zsh
 dnf install -y plymouth-plugin-script
 useradd -D -s /bin/zsh
 
-# Oh My Zsh system-wide
-git clone https://github.com/ohmyzsh/ohmyzsh.git /etc/skel/.oh-my-zsh
-cp /etc/skel/.oh-my-zsh/templates/zshrc.zsh-template /etc/skel/.zshrc
+
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 
 # Install Powerlevel10k theme

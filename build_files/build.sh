@@ -9,11 +9,8 @@ useradd -D -s /bin/zsh
 
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 
-# Install Powerlevel10k theme
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-    /etc/skel/.oh-my-zsh/custom/themes/powerlevel10k
-sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="powerlevel10k\/powerlevel10k"/' /etc/skel/.zshrc
 
+sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /etc/os-release
 
 # MacTahoe GTK Theme
 mkdir -p /usr/share/themes
@@ -32,6 +29,10 @@ cd /tmp/tahoe-icons
 git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-kde
 cd /tmp/tahoe-kde
 ./install.sh
+
+# changing what the system reports computer running as
+sudo sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /etc/os-release
+sudo sed -i 's/^NAME=.*/NAME="macOS"/' /etc/os-release
 
 # Apple Plymouth theme
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth

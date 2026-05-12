@@ -31,8 +31,8 @@ cd /tmp/tahoe-kde
 ./install.sh
 
 # changing what the system reports computer running as
-sudo sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /etc/os-release
-sudo sed -i 's/^NAME=.*/NAME="macOS"/' /etc/os-release
+sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /etc/os-release
+sed -i 's/^NAME=.*/NAME="macOS"/' /etc/os-release
 
 # Apple Plymouth theme
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth

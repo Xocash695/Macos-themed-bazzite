@@ -31,10 +31,15 @@ cd /tmp/tahoe-kde
 ./install.sh
 
 # changing what the system reports computer running as
-sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /etc/os-release
-sed -i 's/^NAME=.*/NAME="macOS"/' /etc/os-release
+# /usr/lib/os-release
 sed -i 's/^NAME=.*/NAME="macOS"/' /usr/lib/os-release
 sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /usr/lib/os-release
+sed -i 's/^VARIANT=.*/VARIANT="macOS"/' /usr/lib/os-release
+sed -i 's/^HOME_URL=.*/HOME_URL="https:\/\/www.apple.com"/' /usr/lib/os-release
+sed -i 's/^DOCUMENTATION_URL=.*/DOCUMENTATION_URL="https:\/\/support.apple.com"/' /usr/lib/os-release
+sed -i 's/^SUPPORT_URL=.*/SUPPORT_URL="https:\/\/support.apple.com"/' /usr/lib/os-release
+sed -i 's/^BUG_REPORT_URL=.*/BUG_REPORT_URL="https:\/\/www.apple.com\/feedback"/' /usr/lib/os-release
+
 # Apple Plymouth theme
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
 PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/apple-mac-plymouth"

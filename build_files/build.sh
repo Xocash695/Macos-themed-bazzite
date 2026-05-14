@@ -52,7 +52,7 @@ dnf install -y cargo gcc
 # Install sddm2rpm
 git clone https://github.com/Lunarequest/sddm2rpm.git /tmp/sddm2rpm
 cd /tmp/sddm2rpm
-cargo install --path . --root /usr/local
+CARGO_HOME=/tmp/cargo cargo install --path . --root /usr/local
 
 # Clone and package the theme
 git clone https://github.com/zayronxio/Sonoma-SDDMT.git /tmp/Apple-Sonoma-v1

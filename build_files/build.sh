@@ -64,6 +64,7 @@ tar -czvf sddm-apple-sonoma.tar.gz -C Apple-Sonoma-v1 .
 # Install the RPM
 rpm -ivh --nodeps --nodigest --nosignature /tmp/sddm-apple-sonoma*.rpm
 
+dnf install -y sddm-kcm
 # Set as default theme
 mkdir -p /etc/sddm.conf.d
 printf '[Theme]\nCurrent=Apple-Sonoma-v1\n' > /etc/sddm.conf.d/theme.conf

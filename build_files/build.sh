@@ -9,7 +9,6 @@ useradd -D -s /bin/zsh
 
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 
-
 sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /etc/os-release
 
 # MacTahoe GTK Theme
@@ -30,17 +29,6 @@ git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-k
 cd /tmp/tahoe-kde
 ./install.sh
 
-# changing what the system reports computer running as
-# /usr/lib/os-release
-sed -i 's/^NAME=.*/NAME="macOS"/' /usr/lib/os-release
-sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /usr/lib/os-release
-sed -i 's/^VARIANT=.*/VARIANT="macOS"/' /usr/lib/os-release
-sed -i 's/^HOME_URL=.*/HOME_URL="https:\/\/www.apple.com"/' /usr/lib/os-release
-sed -i 's/^DOCUMENTATION_URL=.*/DOCUMENTATION_URL="https:\/\/support.apple.com"/' /usr/lib/os-release
-sed -i 's/^SUPPORT_URL=.*/SUPPORT_URL="https:\/\/support.apple.com"/' /usr/lib/os-release
-sed -i 's/^BUG_REPORT_URL=.*/BUG_REPORT_URL="https:\/\/www.apple.com\/feedback"/' /usr/lib/os-release
-
-# Apple Plymouth theme
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
 PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/apple-mac-plymouth"
 mkdir -p "$PLYMOUTH_THEME_DIR"
@@ -57,6 +45,12 @@ fi
 printf '[Unit]\nDescription=Set Plymouth theme on first boot\nConditionPathExists=!/var/lib/plymouth-theme-set\nAfter=local-fs.target\n\n[Service]\nType=oneshot\nExecStart=/usr/sbin/plymouth-set-default-theme -R apple-mac-plymouth\nExecStartPost=/usr/bin/touch /var/lib/plymouth-theme-set\nRemainAfterExit=yes\n\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/plymouth-theme-set.service
 
 systemctl enable plymouth-theme-set.service
+
+# Apple Sonoma SDDM theme
+mkdir -p /usr/share/sddm/themes
+mkdir -p /etc/sddm.conf.d
+git clone https://github.com/zayronxio/Sonoma-SDDMT.git /usr/share/sddm/themes/Apple-Sonoma-v1
+printf '[Theme]\nCurrent=Apple-Sonoma-v1\n' > /etc/sddm.conf.d/theme.conf
 
 # KDE skel configs
 mkdir -p /etc/skel/.config/gtk-3.0

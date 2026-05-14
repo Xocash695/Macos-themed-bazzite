@@ -62,7 +62,7 @@ tar -czvf sddm-apple-sonoma.tar.gz -C Apple-Sonoma-v1 .
 /tmp/sddm2rpm-bin/bin/sddm2rpm sddm-apple-sonoma.tar.gz --pkg-version=1.0
 
 # Install the RPM
-dnf install -y --nogpgcheck /tmp/sddm-apple-sonoma*.rpm
+rpm -ivh --nodeps --nodigest --nosignature /tmp/sddm-apple-sonoma*.rpm
 
 # Set as default theme
 mkdir -p /etc/sddm.conf.d

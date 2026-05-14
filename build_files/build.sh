@@ -47,10 +47,23 @@ printf '[Unit]\nDescription=Set Plymouth theme on first boot\nConditionPathExist
 systemctl enable plymouth-theme-set.service
 
 # Apple Sonoma SDDM theme
-mkdir -p /usr/share/sddm/themes
-mkdir -p /etc/sddm.conf.d
-git clone https://github.com/zayronxio/Sonoma-SDDMT.git /usr/share/sddm/themes/Apple-Sonoma-v1
-printf '[Theme]\nCurrent=Apple-Sonoma-v1\n' > /etc/sddm.conf.d/theme.conf
+dnf install -y cargo gcc
+
+# Install sddm2rpm
+git clone https://github.com/Lunarequest/sddm2rpm.git /tmp/sddm2rpm
+cd /tmp/sddm2rpm
+cargo install --path . --root /usr/local
+
+# Clone and package the theme
+git clone https://github.com/zayronxio/Sonoma-SDDMT.git /tmp/Apple-Sonoma-v1
+cd /tmp
+tar -czvf sddm-apple-sonoma.tar.gz -C Apple-Sonoma-v1 .
+
+# Build RPM
+/usr/local/bin/sddm2rpm sddm-apple-sonoma.tar.gz --pkg-version=1.0
+
+# Install the RPM
+dnf install -y /tmp/sddm-apple-sonoma*.rpm
 
 # KDE skel configs
 mkdir -p /etc/skel/.config/gtk-3.0

@@ -47,6 +47,8 @@ systemctl enable plymouth-theme-set.service
 
 dnf install -y sddm sddm-kcm
 
+dnf install -y vicinae
+
 # KDE skel configs
 mkdir -p /etc/skel/.config/gtk-3.0
 mkdir -p /etc/skel/.config/gtk-4.0

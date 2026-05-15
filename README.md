@@ -6,7 +6,6 @@ A custom image of Bazzite with a macOS theme pre-installed, featuring the MacTah
 
 - MacTahoe GTK, Icon, and KDE theme
 - Apple Plymouth boot splash (regenerated on first boot)
-- Apple Sonoma SDDM login theme
 - Zsh as default shell
 - macOS-like KDE configuration
 
@@ -64,5 +63,5 @@ The `build-disk.yml` workflow creates an installable ISO. Trigger it manually fr
 - [MacTahoe Icon Theme](https://github.com/vinceliuice/MacTahoe-icon-theme) by vinceliuice
 - [MacTahoe KDE Theme](https://github.com/vinceliuice/MacTahoe-kde) by vinceliuice
 - [Apple Mac Plymouth](https://github.com/Msouza91/apple-mac-plymouth) by Msouza91
-- [Apple Sonoma SDDM](https://github.com/zayronxio/Sonoma-SDDMT.git) by zayronxio (ISC License)
+- Installs vicinae
 - Built on [Bazzite](https://bazzite.gg/) by Universal Blue

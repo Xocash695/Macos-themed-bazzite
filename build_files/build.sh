@@ -47,6 +47,8 @@ systemctl enable plymouth-theme-set.service
 
 dnf install -y sddm sddm-kcm
 
+sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/terra.repo
+
 dnf install -y vicinae
 
 # KDE skel configs

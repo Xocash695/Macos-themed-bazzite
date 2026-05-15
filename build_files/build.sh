@@ -9,7 +9,6 @@ useradd -D -s /bin/zsh
 
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 
-sed -i 's/^PRETTY_NAME=.*/PRETTY_NAME="macOS"/' /etc/os-release
 
 # MacTahoe GTK Theme
 mkdir -p /usr/share/themes
@@ -45,29 +44,9 @@ fi
 printf '[Unit]\nDescription=Set Plymouth theme on first boot\nConditionPathExists=!/var/lib/plymouth-theme-set\nAfter=local-fs.target\n\n[Service]\nType=oneshot\nExecStart=/usr/sbin/plymouth-set-default-theme -R apple-mac-plymouth\nExecStartPost=/usr/bin/touch /var/lib/plymouth-theme-set\nRemainAfterExit=yes\n\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/plymouth-theme-set.service
 
 systemctl enable plymouth-theme-set.service
-# Apple Sonoma SDDM theme
-dnf install -y cargo gcc
 
-# Install sddm2rpm
-git clone https://github.com/Lunarequest/sddm2rpm.git /tmp/sddm2rpm
-cd /tmp/sddm2rpm
-CARGO_HOME=/tmp/cargo cargo install --path . --root /tmp/sddm2rpm-bin
+dnf install -y sddm sddm-kcm
 
-# Clone and package the theme
-git clone https://github.com/zayronxio/Sonoma-SDDMT.git /tmp/Apple-Sonoma-v1
-cd /tmp
-tar -czvf sddm-apple-sonoma.tar.gz -C Apple-Sonoma-v1 .
-
-# Build RPM
-/tmp/sddm2rpm-bin/bin/sddm2rpm sddm-apple-sonoma.tar.gz --pkg-version=1.0
-
-# Install the RPM
-rpm -ivh --nodeps --nodigest --nosignature /tmp/sddm-apple-sonoma*.rpm
-
-dnf install -y sddm-kcm
-# Set as default theme
-mkdir -p /etc/sddm.conf.d
-printf '[Theme]\nCurrent=Apple-Sonoma-v1\n' > /etc/sddm.conf.d/theme.conf
 # KDE skel configs
 mkdir -p /etc/skel/.config/gtk-3.0
 mkdir -p /etc/skel/.config/gtk-4.0

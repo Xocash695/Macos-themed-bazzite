@@ -8,6 +8,7 @@ A custom image of Bazzite with a macOS theme pre-installed, featuring the MacTah
 - Apple Plymouth boot splash (regenerated on first boot)
 - Zsh as default shell
 - macOS-like KDE configuration
+- sddm installed and is set for default (can customize the theme)
 
 ## Community
 

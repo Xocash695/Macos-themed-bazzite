@@ -48,7 +48,7 @@ printf '[Unit]\nDescription=Set Plymouth theme on first boot\nConditionPathExist
 systemctl enable plymouth-theme-set.service
 dnf install -y sddm sddm-kcm
 systemctl enable --force sddm.service
-sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/terra.repo
+sed -i 's/enabled=0/enabled=1/; s/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra.repo
 dnf install -y vicinae
 # KDE skel configs
 mkdir -p /etc/skel/.config/gtk-3.0

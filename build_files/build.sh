@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 set -ouex pipefail
 ### Install packages
@@ -21,8 +20,8 @@ git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-k
 cd /tmp/tahoe-kde
 ./install.sh
 # MacTahoe SDDM Theme
-chmod +x /tmp/tahoe-kde/sddm/MacTahoe/install.sh
-/tmp/tahoe-kde/sddm/MacTahoe/install.sh
+chmod +x /tmp/tahoe-kde/sddm/install.sh
+/tmp/tahoe-kde/sddm/install.sh
 # Nothing KDE Widgets
 git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
 cd /tmp/nothing-kde-widgets
@@ -56,4 +55,3 @@ sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-m
 dnf install -y tmux
 # Enable services
 systemctl enable podman.socket
-```

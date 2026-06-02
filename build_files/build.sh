@@ -1,3 +1,4 @@
+```bash
 #!/bin/bash
 set -ouex pipefail
 ### Install packages
@@ -22,6 +23,10 @@ cd /tmp/tahoe-kde
 # MacTahoe SDDM Theme
 chmod +x /tmp/tahoe-kde/sddm/MacTahoe/install.sh
 /tmp/tahoe-kde/sddm/MacTahoe/install.sh
+# Nothing KDE Widgets
+git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
+cd /tmp/nothing-kde-widgets
+./install.sh --all
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
 PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/apple-mac-plymouth"
 mkdir -p "$PLYMOUTH_THEME_DIR"
@@ -51,3 +56,4 @@ sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-m
 dnf install -y tmux
 # Enable services
 systemctl enable podman.socket
+```

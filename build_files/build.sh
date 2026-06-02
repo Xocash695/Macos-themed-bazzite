@@ -3,8 +3,6 @@ set -ouex pipefail
 ### Install packages
 dnf install -y sassc zsh
 dnf install -y plymouth-plugin-script
-dnf install -y sddm sddm-kcm
-systemctl enable --force sddm.service
 useradd -D -s /bin/zsh
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 # MacTahoe GTK Theme
@@ -34,8 +32,8 @@ mkdir -p /usr/share/plasma/plasmoids/org.51n7.kMenu
 cp -r /tmp/kmenu/package/* /usr/share/plasma/plasmoids/org.51n7.kMenu/
 # KDE Control Centre Plasmoid
 git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre
-cd /tmp/kde-controlcentre
-plasmapkg2 -i package --packageroot /usr/share/plasma/plasmoids
+mkdir -p /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
+cp -r /tmp/kde-controlcentre/package/* /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre/
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
 PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/apple-mac-plymouth"
 mkdir -p "$PLYMOUTH_THEME_DIR"
@@ -48,7 +46,8 @@ fi
 # Regenerate initramfs on first boot to apply Plymouth theme
 printf '[Unit]\nDescription=Set Plymouth theme on first boot\nConditionPathExists=!/var/lib/plymouth-theme-set\nAfter=local-fs.target\n\n[Service]\nType=oneshot\nExecStart=/usr/sbin/plymouth-set-default-theme -R apple-mac-plymouth\nExecStartPost=/usr/bin/touch /var/lib/plymouth-theme-set\nRemainAfterExit=yes\n\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/plymouth-theme-set.service
 systemctl enable plymouth-theme-set.service
-
+dnf install -y sddm sddm-kcm
+systemctl enable --force sddm.service
 sed -i 's/enabled=0/enabled=1/' /etc/yum.repos.d/terra.repo
 dnf install -y vicinae
 # KDE skel configs

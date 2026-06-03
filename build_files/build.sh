@@ -100,12 +100,14 @@ done
 
 # Alternative: Copy directly to system plasmoids directory
 # Find the actual widget ID from metadata.json in each package
-for package_dir in packages/*/; do
-    if [ -d "${package_dir}" ] && [ -f "${package_dir}metadata.json" ]; then
-        WIDGET_ID=$(jq -r '.KPlugin.Id' "${package_dir}metadata.json")
+# Nothing KDE Widgets
+for widget_dir in packages/*/; do
+    if [ -d "$widget_dir" ] && [ -f "${widget_dir}metadata.json" ]; then
+        WIDGET_ID=$(jq -r '.KPlugin.Id' "${widget_dir}metadata.json")
         if [ "$WIDGET_ID" != "null" ] && [ -n "$WIDGET_ID" ]; then
             rm -rf "/usr/share/plasma/plasmoids/${WIDGET_ID}"
-            cp -r "${package_dir}" "/usr/share/plasma/plasmoids/${WIDGET_ID}/"
+            mkdir -p "/usr/share/plasma/plasmoids/${WIDGET_ID}"
+            cp -a "${widget_dir}." "/usr/share/plasma/plasmoids/${WIDGET_ID}/"
         fi
     fi
 done

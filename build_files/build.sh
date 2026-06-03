@@ -86,33 +86,21 @@ printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
 # ==============================================================================
 # 5. PLASMOIDS & EXTENSION WIDGETS DEPLOYMENT
 # ==============================================================================
-# Nothing KDE Widgets - FIXED INSTALLATION
+# Extract fonts included in the widget package
+#
+# Nothing KDE Widgets
 git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
 cd /tmp/nothing-kde-widgets
-
-# Install all widgets using kpackagetool6 (recommended method from repo)
-dnf install -y kpackagetool6
-for package_dir in packages/*/; do
-    if [ -d "${package_dir}" ]; then
-        kpackagetool6 --type=Plasma/Applet -i "${package_dir}" || true
-    fi
-done
-
-# Alternative: Copy directly to system plasmoids directory
-# Find the actual widget ID from metadata.json in each package
-# Nothing KDE Widgets
 for widget_dir in packages/*/; do
     if [ -d "$widget_dir" ] && [ -f "${widget_dir}metadata.json" ]; then
         WIDGET_ID=$(jq -r '.KPlugin.Id' "${widget_dir}metadata.json")
         if [ "$WIDGET_ID" != "null" ] && [ -n "$WIDGET_ID" ]; then
             rm -rf "/usr/share/plasma/plasmoids/${WIDGET_ID}"
-            mkdir -p "/usr/share/plasma/plasmoids/${WIDGET_ID}"
-            cp -a "${widget_dir}." "/usr/share/plasma/plasmoids/${WIDGET_ID}/"
+            cp -r "${widget_dir}" "/usr/share/plasma/plasmoids/${WIDGET_ID}"
         fi
     fi
 done
-# okay why isn't this working guys
-# Extract fonts included in the widget package
+
 mkdir -p /usr/share/fonts/truetype/nothing
 find /tmp/nothing-kde-widgets/ -name "*.ttf" -o -name "*.otf" -exec cp {} /usr/share/fonts/truetype/nothing/ \;
 fc-cache -f &>/dev/null || true

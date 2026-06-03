@@ -4,7 +4,7 @@ set -ouex pipefail
 # ==============================================================================
 # 1. CORE PACKAGES & DEPENDENCIES
 # ==============================================================================
-dnf install -y sassc zsh plymouth-plugin-script sddm sddm-kcm tmux jq kpackage-tools
+dnf install -y sassc zsh plymouth-plugin-script sddm sddm-kcm tmux jq kpackagetool6
 
 # Configure default system shell parameters
 useradd -D -s /bin/zsh

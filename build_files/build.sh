@@ -127,7 +127,7 @@ sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-m
 mkdir -p /etc/skel/.config/gtk-3.0
 mkdir -p /etc/skel/.config/gtk-4.0
 
-printf '[Icons]\nTheme=MacTahoe-light\n\n[KDE]\nLookAndFeelPackage=MacTahoe-Light\n' > /etc/skel/.config/kdeglobals
+printf '[Icons]\nTheme=MacTahoe-light\n\n[KDE]\nLookAndFeelPackage=com.github.vinceliuice.MacTahoeLight\n' > /etc/skel/.config/kdeglobals
 printf '[Theme]\nname=MacTahoe-Light\n' > /etc/skel/.config/plasmarc
 printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-3.0/settings.ini
 printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-4.0/settings.ini

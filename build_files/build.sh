@@ -88,7 +88,16 @@ mkdir -p /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
 cp -r /tmp/kde-controlcentre/package/* /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre/
 
 # ==============================================================================
-# 6. PLYMOUTH BOOT SPLASH GRAPHICS
+# 6. KWIN SCRIPTS
+# ==============================================================================
+# MACsimize6 KWin Script
+git clone https://github.com/Ubiquitine/MACsimize6.git --depth=1 /tmp/macsimize6
+mkdir -p /usr/share/kwin/scripts/MACsimize6
+cp -r /tmp/macsimize6/contents /usr/share/kwin/scripts/MACsimize6/
+cp /tmp/macsimize6/metadata.json /usr/share/kwin/scripts/MACsimize6/
+
+# ==============================================================================
+# 7. PLYMOUTH BOOT SPLASH GRAPHICS
 # ==============================================================================
 git clone https://github.com/Msouza91/apple-mac-plymouth.git /tmp/apple-plymouth
 PLYMOUTH_THEME_DIR="/usr/share/plymouth/themes/apple-mac-plymouth"
@@ -105,7 +114,7 @@ printf '[Unit]\nDescription=Set Plymouth theme on first boot\nConditionPathExist
 systemctl enable plymouth-theme-set.service
 
 # ==============================================================================
-# 7. COPR AND REPOSITORY TWEAKS
+# 8. COPR AND REPOSITORY TWEAKS
 # ==============================================================================
 systemctl enable --force sddm.service
 sed -i 's/enabled=0/enabled=1/; s/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra.repo
@@ -113,7 +122,7 @@ dnf install -y vicinae
 sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo
 
 # ==============================================================================
-# 8. GLOBAL DEFAULT USER PROFILE CONFIGURATIONS (etc/skel)
+# 9. GLOBAL DEFAULT USER PROFILE CONFIGURATIONS (etc/skel)
 # ==============================================================================
 mkdir -p /etc/skel/.config/gtk-3.0
 mkdir -p /etc/skel/.config/gtk-4.0
@@ -122,8 +131,9 @@ printf '[Icons]\nTheme=MacTahoe-light\n\n[KDE]\nLookAndFeelPackage=MacTahoe-Ligh
 printf '[Theme]\nname=MacTahoe-Light\n' > /etc/skel/.config/plasmarc
 printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-3.0/settings.ini
 printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-4.0/settings.ini
+printf '[Plugins]\nMACsimize6Enabled=true\n' >> /etc/skel/.config/kwinrc
 
 # ==============================================================================
-# 9. SYSTEM SERVICES CONFIGURATION
+# 10. SYSTEM SERVICES CONFIGURATION
 # ==============================================================================
 systemctl enable podman.socket

@@ -4,7 +4,7 @@ set -ouex pipefail
 # ==============================================================================
 # 1. CORE PACKAGES & DEPENDENCIES
 # ==============================================================================
-dnf install -y sassc zsh plymouth-plugin-script sddm sddm-kcm tmux jq
+dnf install -y sassc zsh plymouth-plugin-script sddm sddm-kcm tmux jq kpackage-tools
 
 # Configure default system shell parameters
 useradd -D -s /bin/zsh
@@ -89,15 +89,12 @@ printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
 # Extract fonts included in the widget package
 #
 # Nothing KDE Widgets
+# Nothing KDE Widgets
 git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
 cd /tmp/nothing-kde-widgets
 for widget_dir in packages/*/; do
     if [ -d "$widget_dir" ] && [ -f "${widget_dir}metadata.json" ]; then
-        WIDGET_ID=$(jq -r '.KPlugin.Id' "${widget_dir}metadata.json")
-        if [ "$WIDGET_ID" != "null" ] && [ -n "$WIDGET_ID" ]; then
-            rm -rf "/usr/share/plasma/plasmoids/${WIDGET_ID}"
-            cp -r "${widget_dir}" "/usr/share/plasma/plasmoids/${WIDGET_ID}"
-        fi
+        kpackagetool6 --type=Plasma/Applet --packageroot /usr/share/plasma/plasmoids -i "${widget_dir%/}" || true
     fi
 done
 

@@ -157,7 +157,9 @@ printf '[Theme]\nname=MacTahoe-Light\n' > /etc/skel/.config/plasmarc
 printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-3.0/settings.ini
 printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-4.0/settings.ini
 printf '[Plugins]\nMACsimize6Enabled=true\n' >> /etc/skel/.config/kwinrc
-
+# Apply MacTahoe look-and-feel layout on first login
+mkdir -p /etc/skel/.config/autostart
+printf '[Desktop Entry]\nType=Application\nName=Apply MacTahoe Layout\nExec=bash -c "lookandfeeltool -a com.github.vinceliuice.MacTahoeLight && rm ~/.config/autostart/apply-mactahoe-layout.desktop"\nHidden=false\nNoDisplay=true\nX-GNOME-Autostart-enabled=true\n' > /etc/skel/.config/autostart/apply-mactahoe-layout.desktop
 # ==============================================================================
 # 10. SYSTEM SERVICES CONFIGURATION
 # ==============================================================================

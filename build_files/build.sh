@@ -31,24 +31,17 @@ git clone https://github.com/vinceliuice/MacTahoe-icon-theme.git --depth=1 /tmp/
 cd /tmp/tahoe-icons
 ./install.sh -d /usr/share/icons
 
-# Install MacTahoe Cursors (Fixed manual loop deployment)
+# Install MacTahoe Cursors
 CURSOR_DIR="/tmp/tahoe-icons/cursors"
 INDEX_FILE="${CURSOR_DIR}/src/cursorSVG"
 
 if [ -d "$CURSOR_DIR" ] && [ -f "$INDEX_FILE" ]; then
     for color in "" "-dark"; do
-        # Handle the base theme directory name format
         THEME_DIR="/usr/share/icons/MacTahoe${color}-cursors"
         rm -rf "$THEME_DIR"
         mkdir -p "$THEME_DIR"
-
-        # Copy compiled bin mappings
         cp -r "${CURSOR_DIR}/dist${color}"/* "${THEME_DIR}/"
-
-        # Copy global configuration components
         cp -rf "${CURSOR_DIR}/src/scalable" "${THEME_DIR}/cursors_scalable"
-
-        # Parse the cursor indexing map to assign custom vectors properly
         for svgid in $(cat "$INDEX_FILE"); do
             cp -rf "${CURSOR_DIR}/src/svg${color}/${svgid}.svg" "${THEME_DIR}/cursors_scalable/${svgid}"
             cp -rf "${CURSOR_DIR}/src/svg${color}/progress"*".svg" "${THEME_DIR}/cursors_scalable/progress"
@@ -56,7 +49,6 @@ if [ -d "$CURSOR_DIR" ] && [ -f "$INDEX_FILE" ]; then
         done
     done
 fi
-
 
 # MacTahoe KDE Theme (Global Engine Styles)
 git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-kde
@@ -94,31 +86,22 @@ printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
 # ==============================================================================
 # 5. PLASMOIDS & EXTENSION WIDGETS DEPLOYMENT
 # ==============================================================================
-# Nothing KDE Widgets (Fixed dynamic ID mapping via jq)
+# Nothing KDE Widgets
 git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
 cd /tmp/nothing-kde-widgets
-for widget_dir in packages/*/; do
-    if [ -d "$widget_dir" ] && [ -f "${widget_dir}metadata.json" ]; then
-        # Read the exact internal ID required by Plasma
-        WIDGET_ID=$(jq -r '.KPlugin.Id' "${widget_dir}metadata.json")
-        if [ "$WIDGET_ID" != "null" ] && [ -n "$WIDGET_ID" ]; then
-            mkdir -p "/usr/share/plasma/plasmoids/${WIDGET_ID}"
-            cp -r "${widget_dir}"* "/usr/share/plasma/plasmoids/${WIDGET_ID}/"
-        fi
-    fi
-done
+PLASMA_INSTALL_DIR="/usr/share/plasma/plasmoids" ./install.sh --all
 
 # Extract fonts included in the widget package
 mkdir -p /usr/share/fonts/truetype/nothing
 find /tmp/nothing-kde-widgets/ -name "*.ttf" -o -name "*.otf" -exec cp {} /usr/share/fonts/truetype/nothing/ \;
 fc-cache -f &>/dev/null || true
 
-# DarwinMenu Plasmoid (Fixed name mapping to org.latcardi.darwinmenu)
+# DarwinMenu Plasmoid
 git clone https://github.com/lasaczka/darwinmenu.git --depth=1 /tmp/darwinmenu
-mkdir -p /usr/share/plasma/plasmoids/org.latcardi.darwinmenu
-cp -r /tmp/darwinmenu/package/* /usr/share/plasma/plasmoids/org.latcardi.darwinmenu/
+mkdir -p /usr/share/plasma/plasmoids/org.latgardi.darwinmenu
+cp -r /tmp/darwinmenu/package/* /usr/share/plasma/plasmoids/org.latgardi.darwinmenu/
 
-# Plasma Drawer Plasmoid (Fixed Root Directory Mapping)
+# Plasma Drawer Plasmoid
 git clone https://github.com/p-connor/plasma-drawer.git --depth=1 /tmp/plasma-drawer
 rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer
 cp -r /tmp/plasma-drawer /usr/share/plasma/plasmoids/org.kde.plasma.drawer
@@ -128,6 +111,7 @@ rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer/.git
 git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre
 rm -rf /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
 cp -r /tmp/kde-controlcentre/package /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
+
 # ==============================================================================
 # 6. KWIN SCRIPTS
 # ==============================================================================

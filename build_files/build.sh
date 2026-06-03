@@ -111,6 +111,7 @@ for widget_dir in packages/*/; do
         fi
     fi
 done
+# okay why isn't this working guys
 # Extract fonts included in the widget package
 mkdir -p /usr/share/fonts/truetype/nothing
 find /tmp/nothing-kde-widgets/ -name "*.ttf" -o -name "*.otf" -exec cp {} /usr/share/fonts/truetype/nothing/ \;

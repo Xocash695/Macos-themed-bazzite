@@ -94,16 +94,17 @@ printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
 # ==============================================================================
 # 5. PLASMOIDS & EXTENSION WIDGETS DEPLOYMENT
 # ==============================================================================
-# Nothing KDE Widgets
-# Nothing KDE Widgets (Fixed manual system-wide deployment)
+# Nothing KDE Widgets (Fixed dynamic ID mapping via jq)
 git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
 cd /tmp/nothing-kde-widgets
 for widget_dir in packages/*/; do
-    if [ -d "$widget_dir" ]; then
-        widget_name=$(basename "$widget_dir")
-        # Every package internally uses a reverse domain style name starting with org.nothing.*
-        mkdir -p "/usr/share/plasma/plasmoids/org.nothing.${widget_name}"
-        cp -r "${widget_dir}"* "/usr/share/plasma/plasmoids/org.nothing.${widget_name}/"
+    if [ -d "$widget_dir" ] && [ -f "${widget_dir}metadata.json" ]; then
+        # Read the exact internal ID required by Plasma
+        WIDGET_ID=$(jq -r '.KPlugin.Id' "${widget_dir}metadata.json")
+        if [ "$WIDGET_ID" != "null" ] && [ -n "$WIDGET_ID" ]; then
+            mkdir -p "/usr/share/plasma/plasmoids/${WIDGET_ID}"
+            cp -r "${widget_dir}"* "/usr/share/plasma/plasmoids/${WIDGET_ID}/"
+        fi
     fi
 done
 
@@ -112,10 +113,10 @@ mkdir -p /usr/share/fonts/truetype/nothing
 find /tmp/nothing-kde-widgets/ -name "*.ttf" -o -name "*.otf" -exec cp {} /usr/share/fonts/truetype/nothing/ \;
 fc-cache -f &>/dev/null || true
 
-# DarwinMenu Plasmoid (Replaced kMenu)
+# DarwinMenu Plasmoid (Fixed name mapping to org.latcardi.darwinmenu)
 git clone https://github.com/lasaczka/darwinmenu.git --depth=1 /tmp/darwinmenu
-mkdir -p /usr/share/plasma/plasmoids/org.lasaczka.darwinmenu
-cp -r /tmp/darwinmenu/package/* /usr/share/plasma/plasmoids/org.lasaczka.darwinmenu/
+mkdir -p /usr/share/plasma/plasmoids/org.latcardi.darwinmenu
+cp -r /tmp/darwinmenu/package/* /usr/share/plasma/plasmoids/org.latcardi.darwinmenu/
 
 # Plasma Drawer Plasmoid (Fixed Root Directory Mapping)
 git clone https://github.com/p-connor/plasma-drawer.git --depth=1 /tmp/plasma-drawer
@@ -123,11 +124,10 @@ rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer
 cp -r /tmp/plasma-drawer /usr/share/plasma/plasmoids/org.kde.plasma.drawer
 rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer/.git
 
-# KDE Control Centre Plasmoid (Fixed Preventative)
+# KDE Control Centre Plasmoid
 git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre
 rm -rf /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
 cp -r /tmp/kde-controlcentre/package /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
-
 # ==============================================================================
 # 6. KWIN SCRIPTS
 # ==============================================================================

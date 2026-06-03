@@ -117,10 +117,11 @@ git clone https://github.com/lasaczka/darwinmenu.git --depth=1 /tmp/darwinmenu
 mkdir -p /usr/share/plasma/plasmoids/org.lasaczka.darwinmenu
 cp -r /tmp/darwinmenu/package/* /usr/share/plasma/plasmoids/org.lasaczka.darwinmenu/
 
-# Plasma Drawer Plasmoid (Fixed Wildcard Error)
+# Plasma Drawer Plasmoid (Fixed Root Directory Mapping)
 git clone https://github.com/p-connor/plasma-drawer.git --depth=1 /tmp/plasma-drawer
 rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer
-cp -r /tmp/plasma-drawer/package /usr/share/plasma/plasmoids/org.kde.plasma.drawer
+cp -r /tmp/plasma-drawer /usr/share/plasma/plasmoids/org.kde.plasma.drawer
+rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer/.git
 
 # KDE Control Centre Plasmoid (Fixed Preventative)
 git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre

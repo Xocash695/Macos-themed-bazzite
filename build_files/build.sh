@@ -68,24 +68,37 @@ printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
 # 5. PLASMOIDS & EXTENSION WIDGETS DEPLOYMENT
 # ==============================================================================
 # Nothing KDE Widgets
+# Nothing KDE Widgets (Fixed manual system-wide deployment)
 git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
 cd /tmp/nothing-kde-widgets
-PLASMA_INSTALL_DIR="/usr/share/plasma/plasmoids" ./install.sh --all
+for widget_dir in packages/*/; do
+    if [ -d "$widget_dir" ]; then
+        widget_name=$(basename "$widget_dir")
+        # Every package internally uses a reverse domain style name starting with org.nothing.*
+        mkdir -p "/usr/share/plasma/plasmoids/org.nothing.${widget_name}"
+        cp -r "${widget_dir}"* "/usr/share/plasma/plasmoids/org.nothing.${widget_name}/"
+    fi
+done
 
 # Extract fonts included in the widget package
 mkdir -p /usr/share/fonts/truetype/nothing
 find /tmp/nothing-kde-widgets/ -name "*.ttf" -o -name "*.otf" -exec cp {} /usr/share/fonts/truetype/nothing/ \;
 fc-cache -f &>/dev/null || true
 
-# kMenu Plasmoid
-git clone https://github.com/51n7/kMenu.git --depth=1 /tmp/kmenu
-mkdir -p /usr/share/plasma/plasmoids/org.51n7.kMenu
-cp -r /tmp/kmenu/package/* /usr/share/plasma/plasmoids/org.51n7.kMenu/
+# DarwinMenu Plasmoid (Replaced kMenu)
+git clone https://github.com/lasaczka/darwinmenu.git --depth=1 /tmp/darwinmenu
+mkdir -p /usr/share/plasma/plasmoids/org.lasaczka.darwinmenu
+cp -r /tmp/darwinmenu/package/* /usr/share/plasma/plasmoids/org.lasaczka.darwinmenu/
 
 # KDE Control Centre Plasmoid
 git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre
 mkdir -p /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
 cp -r /tmp/kde-controlcentre/package/* /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre/
+
+# Plasma Drawer Plasmoid (Added)
+git clone https://github.com/p-connor/plasma-drawer.git --depth=1 /tmp/plasma-drawer
+mkdir -p /usr/share/plasma/plasmoids/org.kde.plasma.drawer
+cp -r /tmp/plasma-drawer/package/* /usr/share/plasma/plasmoids/org.kde.plasma.drawer/
 
 # ==============================================================================
 # 6. KWIN SCRIPTS

@@ -87,9 +87,18 @@ printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
 # 5. PLASMOIDS & EXTENSION WIDGETS DEPLOYMENT
 # ==============================================================================
 # Nothing KDE Widgets
+# Nothing KDE Widgets
 git clone https://github.com/jaxparrow07/nothing-kde-widgets.git --depth=1 /tmp/nothing-kde-widgets
 cd /tmp/nothing-kde-widgets
-PLASMA_INSTALL_DIR="/usr/share/plasma/plasmoids" ./install.sh --all
+for widget_dir in packages/*/; do
+    if [ -d "$widget_dir" ] && [ -f "${widget_dir}metadata.json" ]; then
+        WIDGET_ID=$(jq -r '.KPlugin.Id' "${widget_dir}metadata.json")
+        if [ "$WIDGET_ID" != "null" ] && [ -n "$WIDGET_ID" ]; then
+            mkdir -p "/usr/share/plasma/plasmoids/${WIDGET_ID}"
+            cp -r "${widget_dir}"* "/usr/share/plasma/plasmoids/${WIDGET_ID}/"
+        fi
+    fi
+done
 
 # Extract fonts included in the widget package
 mkdir -p /usr/share/fonts/truetype/nothing

@@ -31,6 +31,33 @@ git clone https://github.com/vinceliuice/MacTahoe-icon-theme.git --depth=1 /tmp/
 cd /tmp/tahoe-icons
 ./install.sh -d /usr/share/icons
 
+# Install MacTahoe Cursors (Fixed manual loop deployment)
+CURSOR_DIR="/tmp/tahoe-icons/cursors"
+INDEX_FILE="${CURSOR_DIR}/src/cursorSVG"
+
+if [ -d "$CURSOR_DIR" ] && [ -f "$INDEX_FILE" ]; then
+    for color in "" "-dark"; do
+        # Handle the base theme directory name format
+        THEME_DIR="/usr/share/icons/MacTahoe${color}-cursors"
+        rm -rf "$THEME_DIR"
+        mkdir -p "$THEME_DIR"
+
+        # Copy compiled bin mappings
+        cp -r "${CURSOR_DIR}/dist${color}"/* "${THEME_DIR}/"
+
+        # Copy global configuration components
+        cp -rf "${CURSOR_DIR}/src/scalable" "${THEME_DIR}/cursors_scalable"
+
+        # Parse the cursor indexing map to assign custom vectors properly
+        for svgid in $(cat "$INDEX_FILE"); do
+            cp -rf "${CURSOR_DIR}/src/svg${color}/${svgid}.svg" "${THEME_DIR}/cursors_scalable/${svgid}"
+            cp -rf "${CURSOR_DIR}/src/svg${color}/progress"*".svg" "${THEME_DIR}/cursors_scalable/progress"
+            cp -rf "${CURSOR_DIR}/src/svg${color}/wait"*".svg" "${THEME_DIR}/cursors_scalable/wait"
+        done
+    done
+fi
+
+
 # MacTahoe KDE Theme (Global Engine Styles)
 git clone https://github.com/vinceliuice/MacTahoe-kde.git --depth=1 /tmp/tahoe-kde
 cd /tmp/tahoe-kde

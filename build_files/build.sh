@@ -111,10 +111,9 @@ curl -L https://github.com/p-connor/plasma-drawer/releases/download/v2.0.2/plasm
 kpackagetool6 --type=Plasma/Applet --packageroot /usr/share/plasma/plasmoids -i /tmp/plasma-drawer.plasmoid || true
 
 
-# KDE Control Centre Plasmoid
-git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre
-rm -rf /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
-cp -r /tmp/kde-controlcentre/package /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
+# KDE Control Station
+git clone https://github.com/EliverLara/kde-control-station.git --depth=1 --branch plasma6 /tmp/kde-control-station
+kpackagetool6 --type=Plasma/Applet --packageroot /usr/share/plasma/plasmoids -i /tmp/kde-control-station/package || true
 
 # ==============================================================================
 # 6. KWIN SCRIPTS

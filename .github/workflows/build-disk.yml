@@ -88,7 +88,7 @@ jobs:
 
       - name: Upload disk images and Checksum to Job Artifacts
         if: inputs.upload-to-s3 != true && github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bazzite-${{ matrix.disk-type }}
           path: ${{ steps.build.outputs.output-directory }}

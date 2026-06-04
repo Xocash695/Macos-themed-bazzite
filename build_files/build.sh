@@ -163,6 +163,14 @@ printf '[Plugins]\nMACsimize6Enabled=true\n' >> /etc/skel/.config/kwinrc
 # Apply MacTahoe look-and-feel layout on first login
 mkdir -p /etc/skel/.config/autostart
 printf '[Desktop Entry]\nType=Application\nName=Apply MacTahoe Layout\nExec=bash -c "lookandfeeltool -a com.github.vinceliuice.MacTahoeLight && rm ~/.config/autostart/apply-mactahoe-layout.desktop"\nHidden=false\nNoDisplay=true\nX-GNOME-Autostart-enabled=true\n' > /etc/skel/.config/autostart/apply-mactahoe-layout.desktop
+# Window decoration - MacTahoe-Light
+printf '[org.kde.kdecoration2]\nlibrary=org.kde.kwin.aurorae\ntheme=__aurorae__svg__MacTahoe-Light\n' > /etc/skel/.config/kwinrc
+
+# Titlebar buttons - macOS style (close/min/max on left)
+printf '[Style]\nButtonsOnLeft=XIA\nButtonsOnRight=\n' >> /etc/skel/.config/kwinrc
+
+# Cursor - MacTahoe-light
+printf '[Mouse]\ncursorTheme=MacTahoe-light\ncursorSize=24\n' > /etc/skel/.config/kcminputrc
 # ==============================================================================
 # 10. SYSTEM SERVICES CONFIGURATION
 # ==============================================================================

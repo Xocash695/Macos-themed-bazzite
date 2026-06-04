@@ -103,20 +103,23 @@ find /tmp/nothing-kde-widgets/ -name "*.ttf" -o -name "*.otf" -exec cp {} /usr/s
 fc-cache -f &>/dev/null || true
 
 # DarwinMenu Plasmoid
-git clone https://github.com/lasaczka/darwinmenu.git --depth=1 /tmp/darwinmenu
-mkdir -p /usr/share/plasma/plasmoids/org.latgardi.darwinmenu
-cp -r /tmp/darwinmenu/package/* /usr/share/plasma/plasmoids/org.latgardi.darwinmenu/
+# DarwinMenu Plasmoid
+curl -L https://github.com/lasaczka/darwinmenu/releases/download/v1.1/darwinmenu-v1.1-plasma6-5.plasmoid -o /tmp/darwinmenu.plasmoid
+kpackagetool6 --type=Plasma/Applet --packageroot /usr/share/plasma/plasmoids -i /tmp/darwinmenu.plasmoid || true
 
 # Plasma Drawer Plasmoid
 git clone https://github.com/p-connor/plasma-drawer.git --depth=1 /tmp/plasma-drawer
-rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer
-cp -r /tmp/plasma-drawer /usr/share/plasma/plasmoids/org.kde.plasma.drawer
-rm -rf /usr/share/plasma/plasmoids/org.kde.plasma.drawer/.git
+cd /tmp/plasma-drawer
+kpackagetool6 --type=Plasma/Applet --packageroot /usr/share/plasma/plasmoids -i . || true
+
 
 # KDE Control Centre Plasmoid
 git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre
-rm -rf /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
-cp -r /tmp/kde-controlcentre/package /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
+kpackagetool6 --type=Plasma/Applet --packageroot /usr/share/plasma/plasmoids -i /tmp/kde-controlcentre/package || true
+# # KDE Control Centre Plasmoid
+# git clone https://github.com/Prayag2/kde_controlcentre.git --depth=1 /tmp/kde-controlcentre
+# rm -rf /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
+# cp -r /tmp/kde-controlcentre/package /usr/share/plasma/plasmoids/com.github.prayag2.controlcentre
 
 # ==============================================================================
 # 6. KWIN SCRIPTS

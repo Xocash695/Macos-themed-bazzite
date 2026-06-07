@@ -151,6 +151,7 @@ sed -i 's/enabled=0/enabled=1/; s/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' 
 dnf install -y vicinae
 sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo
 ## set my default configs:
+mkdir -p /usr/local/lib
 pip3 install konsave --break-system-packages
 konsave -i /ctx/macOS-layout.knsv
 konsave -a macOS-layout -o /etc/skel

@@ -7,11 +7,13 @@ set -ouex pipefail
 dnf install -y sassc zsh plymouth-plugin-script sddm sddm-kcm tmux jq kpackagetool6
 
 # Configure default system shell parameters
-chmod g-w /usr/local/share/zsh/site-functions
-chmod g-w /usr/local/share/zsh
+
 useradd -D -s /bin/zsh
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 
+chmod 755 /usr/share/zsh
+chmod 755 /usr/share/zsh/site-functions
+chmod 644 /usr/share/zsh/site-functions/*
 # ==============================================================================
 # 2. GLOBAL DIRECTORY INITIALIZATION
 # ==============================================================================

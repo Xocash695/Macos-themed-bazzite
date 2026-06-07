@@ -7,6 +7,8 @@ set -ouex pipefail
 dnf install -y sassc zsh plymouth-plugin-script sddm sddm-kcm tmux jq kpackagetool6
 
 # Configure default system shell parameters
+chmod g-w /usr/local/share/zsh/site-functions
+chmod g-w /usr/local/share/zsh
 useradd -D -s /bin/zsh
 sed -i 's|SHELL=.*|SHELL=/bin/zsh|' /etc/default/useradd
 
@@ -119,11 +121,9 @@ kpackagetool6 --type=Plasma/Applet --packageroot /usr/share/plasma/plasmoids -i 
 # 6. KWIN SCRIPTS
 # ==============================================================================
 # MACsimize6 KWin Script
-git clone https://github.com/Ubiquitine/MACsimize6.git --depth=1 /tmp/macsimize6
-mkdir -p /usr/share/kwin/scripts/MACsimize6
-cp -r /tmp/macsimize6/contents /usr/share/kwin/scripts/MACsimize6/
-cp /tmp/macsimize6/metadata.json /usr/share/kwin/scripts/MACsimize6/
-
+# MACsimize6 KWin Script
+curl -L https://github.com/Ubiquitine/MACsimize6/releases/download/v0.7.1/macsimize6-0.7.1.kwinscript -o /tmp/macsimize6.kwinscript
+kpackagetool6 --type=KWin/Script --packageroot /usr/share/kwin/scripts -i /tmp/macsimize6.kwinscript || true
 # ==============================================================================
 # 7. PLYMOUTH BOOT SPLASH GRAPHICS
 # ==============================================================================
@@ -148,30 +148,9 @@ systemctl enable --force sddm.service
 sed -i 's/enabled=0/enabled=1/; s/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra.repo
 dnf install -y vicinae
 sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo
+## set my default configs:
+pip3 install konsave --break-system-packages
+konsave -i /ctx/macOS-layout.knsv
+konsave -a macOS-layout -o /etc/skel
 
-# ==============================================================================
-# 9. GLOBAL DEFAULT USER PROFILE CONFIGURATIONS (etc/skel)
-# ==============================================================================
-mkdir -p /etc/skel/.config/gtk-3.0
-mkdir -p /etc/skel/.config/gtk-4.0
-
-printf '[Icons]\nTheme=MacTahoe-light\n\n[KDE]\nLookAndFeelPackage=com.github.vinceliuice.MacTahoeLight\n' > /etc/skel/.config/kdeglobals
-printf '[Theme]\nname=MacTahoe-Light\n' > /etc/skel/.config/plasmarc
-printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-3.0/settings.ini
-printf '[Settings]\ngtk-theme-name=MacTahoe-Light\ngtk-icon-theme-name=MacTahoe-light\n' > /etc/skel/.config/gtk-4.0/settings.ini
-printf '[Plugins]\nMACsimize6Enabled=true\n' >> /etc/skel/.config/kwinrc
-# Apply MacTahoe look-and-feel layout on first login
-mkdir -p /etc/skel/.config/autostart
-printf '[Desktop Entry]\nType=Application\nName=Apply MacTahoe Layout\nExec=bash -c "lookandfeeltool -a com.github.vinceliuice.MacTahoeLight && rm ~/.config/autostart/apply-mactahoe-layout.desktop"\nHidden=false\nNoDisplay=true\nX-GNOME-Autostart-enabled=true\n' > /etc/skel/.config/autostart/apply-mactahoe-layout.desktop
-# Window decoration - MacTahoe-Light
-printf '[org.kde.kdecoration2]\nlibrary=org.kde.kwin.aurorae\ntheme=__aurorae__svg__MacTahoe-Light\n' > /etc/skel/.config/kwinrc
-
-# Titlebar buttons - macOS style (close/min/max on left)
-printf '[Style]\nButtonsOnLeft=XIA\nButtonsOnRight=\n' >> /etc/skel/.config/kwinrc
-
-# Cursor - MacTahoe-light
-printf '[Mouse]\ncursorTheme=MacTahoe-light\ncursorSize=24\n' > /etc/skel/.config/kcminputrc
-# ==============================================================================
-# 10. SYSTEM SERVICES CONFIGURATION
-# ==============================================================================
 systemctl enable podman.socket

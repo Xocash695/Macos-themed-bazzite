@@ -156,7 +156,9 @@ mkdir -p /tmp/konsave-venv
 python3 -m venv /tmp/konsave-venv
 /tmp/konsave-venv/bin/pip install konsave
 /tmp/konsave-venv/bin/konsave -i /ctx/macOS-layout.knsv
-/tmp/konsave-venv/bin/konsave -a macOS-layout -o /etc/skel
+/tmp/konsave-venv/bin/konsave -a macOS-layout
+cp -r /root/.config/. /etc/skel/.config/
+cp -r /root/.local/. /etc/skel/.local/ 2>/dev/null || true
 # ==============================================================================
 # 10. SYSTEM SERVICES CONFIGURATION
 # ==============================================================================

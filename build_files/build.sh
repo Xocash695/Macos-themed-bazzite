@@ -152,7 +152,9 @@ sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-m
 # ==============================================================================
 # 9. DEFAULT USER PROFILE CONFIGURATIONS (konsave)
 # ==============================================================================
-python -m pip install konsave
+mkdir -p /opt/konsave
+pip3 install konsave --break-system-packages --target=/opt/konsave
+export PYTHONPATH="/opt/konsave:$PYTHONPATH"
 konsave -i /ctx/macOS-layout.knsv
 konsave -a macOS-layout -o /etc/skel
 

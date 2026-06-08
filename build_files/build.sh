@@ -85,8 +85,7 @@ sed -i 's/Theme-Id=MacTahoe/Theme-Id=MacTahoe-Dark/g' "${SDDM_THEME_DIR}/MacTaho
 sed -i 's/MacTahoe/MacTahoe-Dark/g' "${SDDM_THEME_DIR}/MacTahoe-Dark/Main.qml"
 
 # Force SDDM to load MacTahoe-Light globally on system boot
-mkdir -p /etc/sddm.conf.d
-printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
+
 
 # ==============================================================================
 # 5. PLASMOIDS & EXTENSION WIDGETS DEPLOYMENT
@@ -159,6 +158,10 @@ python3 -m venv /tmp/konsave-venv
 /tmp/konsave-venv/bin/konsave -a macOS-layout
 cp -r /root/.config/. /etc/skel/.config/
 cp -r /root/.local/. /etc/skel/.local/ 2>/dev/null || true
+
+
+mkdir -p /etc/sddm.conf.d
+printf '[Theme]\nCurrent=MacTahoe-Light\n' > /etc/sddm.conf.d/theme.conf
 # ==============================================================================
 # 10. SYSTEM SERVICES CONFIGURATION
 # ==============================================================================

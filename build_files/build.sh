@@ -24,14 +24,6 @@ mkdir -p /usr/share/sddm/themes
 mkdir -p /usr/share/plasma/plasmoids
 
 # ==============================================================================
-# 3. MACTAHOE DESKTOP STYLING (GTK, ICONS, & PLASMA CORE)
-# ==============================================================================
-# MacTahoe GTK Theme
-git clone https://github.com/vinceliuice/MacTahoe-gtk-theme.git --depth=1 /tmp/tahoe-gtk
-cd /tmp/tahoe-gtk
-./install.sh --silent-mode 2>&1 | tail -50 || true
-
-# ==============================================================================
 # 5. PLASMOIDS & EXTENSION WIDGETS DEPLOYMENT
 # ==============================================================================
 # Nothing KDE Widgets

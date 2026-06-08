@@ -62,7 +62,6 @@ kpackagetool6 --type=KWin/Script --packageroot /usr/share/kwin/scripts -i /tmp/m
 # ==============================================================================
 # 8. COPR AND REPOSITORY TWEAKS
 # ==============================================================================
-systemctl enable --force sddm.service
 sed -i 's/enabled=0/enabled=1/; s/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra.repo
 dnf install -y vicinae
 sed -i 's/gpgcheck=1/gpgcheck=0/g; /gpgkey=file:\/\//d' /etc/yum.repos.d/terra-mesa.repo

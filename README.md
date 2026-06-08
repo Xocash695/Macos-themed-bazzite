@@ -1,7 +1,7 @@
 # MacOS-themed-bazzite
 A custom image of Bazzite with a macOS theme pre-installed, featuring the MacTahoe GTK/KDE theme, Apple Plymouth boot splash, and more.
 
-> **Disclaimer:** This project is in no way affiliated with, endorsed by, or associated with Apple Inc. macOS is a trademark of Apple Inc. No ISO image is provided in this repository due to legal considerations around redistributing assets inspired by Apple's intellectual property.
+> **Disclaimer:** This project is in no way affiliated with, endorsed by, or associated with Apple Inc. macOS is a trademark of Apple Inc. This repository does not host any Apple assets or artifacts — it simply automates the download, installation, and configuration of third-party open-source themes and tools that are inspired by macOS. No ISO image is distributed publicly in this repository for legal reasons.
 
 ## AI Disclosure
 This project was created with the assistance of AI (Claude by Anthropic and Gemini by Google).
@@ -69,4 +69,5 @@ The `build-disk.yml` workflow creates an installable ISO. Trigger it manually fr
 - [DarwinMenu](https://github.com/lasaczka/darwinmenu) by lasaczka
 - [Plasma Drawer](https://github.com/p-connor/plasma-drawer) by p-connor
 - [KDE Control Station](https://github.com/EliverLara/kde-control-station) by EliverLara
+- [Konsave](https://github.com/Prayag2/konsave) by Prayag2 — used to export and apply KDE profile configurations
 - Built on [Bazzite](https://bazzite.gg/) by Universal Blue

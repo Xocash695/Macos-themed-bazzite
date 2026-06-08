@@ -1,10 +1,7 @@
 # MacOS-themed-bazzite
 A custom image of Bazzite with a macOS theme pre-installed, featuring the MacTahoe GTK/KDE theme, Apple Plymouth boot splash, and more.
 
-> **Disclaimer:** This project is in no way affiliated with, endorsed by, or associated with Apple Inc. macOS is a trademark of Apple Inc. This repository does not host any Apple assets or artifacts — it simply automates the download, installation, and configuration of third-party open-source themes and tools that are inspired by macOS. No ISO image is distributed publicly in this repository for legal reasons.
-
-## About the Pre-built Package
-The OCI image published to GHCR (`ghcr.io/xocash695/macos-themed-bazzite:latest`) is simply the automated output of running `build.sh` inside a container via GitHub Actions — the same result you would get if you built the image yourself from the source code in this repository. No assets are manually curated or hosted by this project; everything is fetched at build time from the original upstream sources listed in the Credits section. The published package exists purely as a convenience for existing users to receive updates without having to rebuild the image themselves.
+> **Disclaimer:** This project is in no way affiliated with, endorsed by, or associated with Apple Inc. macOS is a trademark of Apple Inc. This repository does not host any Apple assets or artifacts — it simply automates the download, installation, and configuration of third-party open-source themes and tools inspired by macOS. The pre-built OCI image published to GHCR is the automated output of running `build.sh` via GitHub Actions, fetching everything at build time from the upstream sources listed in the Credits section. The only exception is a Konsave profile (`macOS-layout.knsv`) included in this repo, which contains our custom KDE panel and widget layout. The package is made available for existing users to receive updates via `bootc upgrade`. No ISO is distributed publicly for legal reasons.
 
 ## AI Disclosure
 This project was created with the assistance of AI (Claude by Anthropic and Gemini by Google).
@@ -22,15 +19,6 @@ This project was created with the assistance of AI (Claude by Anthropic and Gemi
 - tmux
 - vicinae (via Terra repo)
 - Podman socket enabled
-
-### 🛠️ GitHub Actions Workflow changes: 
-
-The `build-disk.yml` workflow has been updated to fix artifact download failures and optimize storage handling. Here is a summary of the changes:
-
-* **Separated Matrix Artifacts:** Previously, both the `qcow2` and `anaconda-iso` build jobs uploaded their outputs to the same generic directory, causing them to conflict. The upload step now dynamically names the artifacts (`bazzite-qcow2` and `bazzite-anaconda-iso`) based on the build matrix.
-* **Enabled Artifact Compression:** Removed the `compression-level: 0` flag. Allowing GitHub to compress the raw operating system images significantly reduces the final `.zip` size (from ~6.4 GB down to a manageable size), preventing browser gateway timeouts ($404$/$502$ errors) during download.
-* **Fixed Artifact Retention:** Adjusted `retention-days` from `0` to `7` to ensure completed build images are safely stored and available for retrieval before being automatically purged.
-* **Upgraded Upload Action:** Migrated the upload step to `actions/upload-artifact@v4` to natively support distinct matrix artifact naming conventions.
 
 ## Community
 If you have questions, try the following spaces:
@@ -63,11 +51,12 @@ Add the contents of `cosign.key` as a GitHub secret named `SIGNING_SECRET`.
 The image builds automatically via GitHub Actions on every push. It is published to `ghcr.io/xocash695/macos-themed-bazzite:latest`.
 
 ### Building an ISO
-The `build-disk.yml` workflow creates an installable ISO. Trigger it manually from the Actions tab, selecting `amd64` as the platform. The ISO will be available as a downloadable artifact after the workflow completes. Note that the ISO is not distributed publicly in this repository for legal reasons.
+The `build-disk.yml` workflow creates an installable ISO. Trigger it manually from the Actions tab, selecting `amd64` as the platform. The ISO will be available as a downloadable artifact after the workflow completes. Note that the ISO is not distributed publicly for legal reasons.
 
 ## Repository Contents
 - **Containerfile** — defines the base image and calls `build.sh`
 - **build.sh** — installs and configures all themes and customizations
+- **macOS-layout.knsv** — Konsave profile containing the custom KDE panel and widget layout
 - **build.yml** — GitHub Actions workflow that builds and publishes the OCI image to GHCR
 - **build-disk.yml** — GitHub Actions workflow that builds an installable ISO
 

@@ -3,6 +3,9 @@ A custom image of Bazzite with a macOS theme pre-installed, featuring the MacTah
 
 > **Disclaimer:** This project is in no way affiliated with, endorsed by, or associated with Apple Inc. macOS is a trademark of Apple Inc. This repository does not host any Apple assets or artifacts — it simply automates the download, installation, and configuration of third-party open-source themes and tools that are inspired by macOS. No ISO image is distributed publicly in this repository for legal reasons.
 
+## About the Pre-built Package
+The OCI image published to GHCR (`ghcr.io/xocash695/macos-themed-bazzite:latest`) is simply the automated output of running `build.sh` inside a container via GitHub Actions — the same result you would get if you built the image yourself from the source code in this repository. No assets are manually curated or hosted by this project; everything is fetched at build time from the original upstream sources listed in the Credits section. The published package exists purely as a convenience for existing users to receive updates without having to rebuild the image themselves.
+
 ## AI Disclosure
 This project was created with the assistance of AI (Claude by Anthropic and Gemini by Google).
 
@@ -19,6 +22,15 @@ This project was created with the assistance of AI (Claude by Anthropic and Gemi
 - tmux
 - vicinae (via Terra repo)
 - Podman socket enabled
+
+### 🛠️ GitHub Actions Workflow changes: 
+
+The `build-disk.yml` workflow has been updated to fix artifact download failures and optimize storage handling. Here is a summary of the changes:
+
+* **Separated Matrix Artifacts:** Previously, both the `qcow2` and `anaconda-iso` build jobs uploaded their outputs to the same generic directory, causing them to conflict. The upload step now dynamically names the artifacts (`bazzite-qcow2` and `bazzite-anaconda-iso`) based on the build matrix.
+* **Enabled Artifact Compression:** Removed the `compression-level: 0` flag. Allowing GitHub to compress the raw operating system images significantly reduces the final `.zip` size (from ~6.4 GB down to a manageable size), preventing browser gateway timeouts ($404$/$502$ errors) during download.
+* **Fixed Artifact Retention:** Adjusted `retention-days` from `0` to `7` to ensure completed build images are safely stored and available for retrieval before being automatically purged.
+* **Upgraded Upload Action:** Migrated the upload step to `actions/upload-artifact@v4` to natively support distinct matrix artifact naming conventions.
 
 ## Community
 If you have questions, try the following spaces:
